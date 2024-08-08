@@ -23,7 +23,7 @@ public class Sith extends Master implements ForceUser {
      */
     @Override
     public void useForce(Master target) {
-        if (this.cpt % 6 == 0) {
+        if (this.cpt % 3 == 0) {
             lighting(target);
             System.out.println(this.getName() + " used lighting on " + target.getName());
         } else if (this.cpt % 2 == 0) {

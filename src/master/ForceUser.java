@@ -9,4 +9,5 @@ public interface ForceUser {
      * @param target The target master.
      */
     void useForce(Master target);
+    
 }

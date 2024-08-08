@@ -67,7 +67,12 @@ public class Main {
         }
 
         // Loop to handle combat between characters
+        int tour = 1;
         while (mainRun) {
+
+            if (jediList.isEmpty() || sithList.isEmpty()) {
+                mainRun = false;
+            }
             // Randomly select a Jedi and a Sith for combat
             Jedi jedi = jediList.get((int) (Math.random() * jediList.size()));
             Sith sith = sithList.get((int) (Math.random() * sithList.size()));
@@ -77,33 +82,63 @@ public class Main {
             System.out.println(sith);
 
             // Randomly decide which character attacks first
+            //check the status of the characters before attacking if they have a status effect
+            System.out.println("Tour " + tour);
             if (Math.random() < 0.5) {
-                jedi.attack(sith);
+                tour++;
+
+                if (jedi.hasStatus("pushed")) {
+                    jedi.decrementStatusTurns();
+                    System.out.println(jedi + " ne peut pas attaque car il a été poussé !");
+                }
+                else{
+                    jedi.attack(sith);
+                }
+
                 if (sith.isAlive()) {
-                    sith.attack(jedi);
+                    if (sith.hasStatus("pushed")) {
+                        sith.decrementStatusTurns();
+                        System.out.println(sith + " ne peut pas attaque car il a été poussé !");
+                    }
+                    else {
+                        sith.attack(jedi);
+                    }
                     if (!jedi.isAlive()) {
                         System.out.println(sith + " a gagné !");
+                        jediList.remove(jedi);
                         mainRun = false;
                     }
                 } else {
                     System.out.println(jedi + " a gagné !");
+                    sithList.remove(sith);
                     mainRun = false;
                 }
             } else {
-                sith.attack(jedi);
+                tour++;
+
+                if (sith.hasStatus("pushed")) {
+                    sith.decrementStatusTurns();
+                    System.out.println(sith + " ne peut pas attaque car il a été poussé !");
+                }
+                else{
+                    sith.attack(jedi);
+                }
                 if (jedi.isAlive()) {
-                    jedi.attack(sith);
+                    if (jedi.hasStatus("pushed")) {
+                        jedi.decrementStatusTurns();
+                        System.out.println(jedi + " ne peut pas attaque car il a été poussé !");
+                    }
+                    else{
+                        jedi.attack(sith);
+                    }
                     if (!sith.isAlive()) {
                         System.out.println(jedi + " a gagné !");
+                        sithList.remove(sith);
                         mainRun = false;
                     }
                 } else {
                     System.out.println(sith + " a gagné !");
-                    mainRun = false;
-                }
-                jedi.attack(sith);
-                if (!sith.isAlive()) {
-                    System.out.println(jedi + " a gagné !");
+                    jediList.remove(jedi);
                     mainRun = false;
                 }
             }
